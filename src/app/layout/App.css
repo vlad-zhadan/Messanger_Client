@@ -40,3 +40,50 @@
 .read-the-docs {
   color: #888;
 }
+
+body,
+html,
+#root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  
+}
+
+.spliter {
+  height: 100%;
+  /* Make Splitter take up full height */
+  width: 100%;
+  color: white;
+}
+
+.rightSpliter{
+  background-color: rgba(13, 51, 65, 0.935);
+}
+
+.card{
+
+}
+
+.messageBox{
+
+  display: flex;
+  align-items: center;
+
+}
+
+.privateChat{
+  height: 60px;
+  width: 100%;
+  border-color: white;
+ 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.selected{
+  background-color: rgba(61, 101, 135, 0.143);
+  border-style: dotted;
+}
