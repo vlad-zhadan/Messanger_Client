@@ -1,17 +1,23 @@
 import { Chat } from "./chat"
 
 export interface MessageToSend { 
-    userOwnerId: number 
     text: string
     chatId: number
 }
 
 export interface Message { 
     messageId : number
-    userOwnerId: number 
-    text: string
     chatId: number
+    text: string
+    userOwnerId: number 
+    documentId : number
     timeSent: string
+    receiverIds : number[]
+}
+
+export interface MessageToEdit{
+    messageId : number
+    newText : string 
 }
 
 export interface MessageReceiver{

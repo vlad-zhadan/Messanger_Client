@@ -3,6 +3,8 @@ export interface Chat {
     type: ChatType
     lastMessageId: number | undefined
     numberOfUnreadMessages: number
+    createdAt : string
+    lastMessageTime : Date
 }
 
 export interface PersonalChat extends Chat {
@@ -20,7 +22,7 @@ enum ChatStatus{
     Blocking = 2
 }
 
-enum ChatType{
+export enum ChatType{
     PersonalChat = 0,
     GroupChat = 1,
     Channel = 2

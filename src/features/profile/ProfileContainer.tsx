@@ -2,9 +2,10 @@ import { observer } from "mobx-react-lite";
 import { Profile } from "../../app/model/user";
 import { useStore } from "../../app/store/store";
 import React from "react";
+import ExtendProfileContainer from "./ExtendProfileContainer";
 
 interface ProfileProps {
-    profile : Profile | undefined
+    profile : Profile 
 }
 
 function ProfileContainer({profile} : ProfileProps){
@@ -13,11 +14,14 @@ function ProfileContainer({profile} : ProfileProps){
     return (
          <div 
           className="message"
-          onClick={()=> 
-            
+          onClick={()=> {
+            profileStore.setChoosenProfile(profile?.profileId)
             modalStore.openModal(
-                <ProfileContainer profile={profile}  />
+                <ExtendProfileContainer  />
             )
+          }
+            
+           
 
           } 
           >
@@ -28,6 +32,6 @@ function ProfileContainer({profile} : ProfileProps){
     );
 }
 
-// profileStore.setChoosenProfile(profile?.profileId)
+// 
 
 export default observer(ProfileContainer);

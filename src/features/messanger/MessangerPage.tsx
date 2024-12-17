@@ -9,58 +9,41 @@ import ModalContainer from '../../app/common/modals/ModalContainer';
 
 
 function MessangerPage() {
-  const { messageStore } = useStore();
-  const { sendMessage, userId, setUserId , groups, setChoosenChat, choosenChat,  MessagesInGroup, loadOldMessages, loading} = messageStore;
+  const { messageStore, chatStore, connectionStore } = useStore();
+  const { sendMessage, userId, setUserId ,  MessagesInGroup, loadOldMessages} = messageStore;
+  const {choosenChat, setChoosenChat, Chats} = chatStore;
 
   const [messageText, setMessageText] = useState(""); // Message input
-  const [userOwnerId, setUserOwnerId] = useState(1); // User ID input
-  const [chatId, setChatId] = useState(1); // User ID input
 
   useEffect(() => {
     if (userId !== null) {
-      messageStore.createHubConnection();
+      connectionStore.createHubConnection();
     }
-
 
     return () => {
-      messageStore.stopHubConnection();
+      connectionStore.stopHubConnection();
     };
-  }, [messageStore, userId]);
+  }, [connectionStore, userId]);
+
+  useEffect(() => {
+    if (chatStore.choosenChat && !chatStore.chatsHistory.get(chatStore.choosenChat)) {
+      loadOldMessages();
+    }
+  }, [choosenChat]);
 
     useEffect(() => {
-      if (messageStore.choosenChat && !messageStore.groupsHistory.get(messageStore.choosenChat)) {
-        loadOldMessages();  // Load messages when the chat is selected
-      }
-    }, [choosenChat]);
+      console.log("Chats in MessengerPage:", Chats); // Log Chats whenever it updates
+  }, [messageStore]);
 
-  // Handle setting userId
-  const handleSubmitId = (e: React.FormEvent) => {
-    e.preventDefault();
-    const parsedUserId = parseInt(userOwnerId.toString(), 10);
-    if (!isNaN(parsedUserId)) {
-      setUserId(parsedUserId); // Set the userId in the store
-    } else {
-      alert('Please enter a valid numeric User ID.');
-    }
-  };
-
-    // Handle input change for userOwnerId
-  const handleUserOwnerIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUserOwnerId(Number(e.target.value)); // Convert to number
-  };
-
-  // Handle input change for message text
   const handleMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessageText(e.target.value);
   };
 
-  // Handle form submission (sending the message)
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault(); // Prevent default form submission behavior
 
     if (messageText.trim() !== "" && choosenChat !== null) {
       const message: MessageToSend = {
-        userOwnerId,
         text: messageText,
         chatId: choosenChat!,
       };
@@ -70,13 +53,8 @@ function MessangerPage() {
     }
   };
 
-  const handleChatIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setChatId(Number(e.target.value)); // Convert to number
-    setChoosenChat(Number(e.target.value));
-  };
+  if(connectionStore.loading) return <></>
 
-
-  if(loading) return <></>
 
 
   return (
@@ -87,7 +65,7 @@ function MessangerPage() {
        <div className="chats">
 
         <SearchElement />
-        {groups.map((group, index) => (
+        {Chats.map((group, index) => (
 
           <div key={index} className="group">
             <div 

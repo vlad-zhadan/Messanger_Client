@@ -14,7 +14,9 @@ export default class ProfileStore {
     }
 
     get SearchResultProfiles (){
-        return this.searchProfiles.map(profileId => this.profiles.get(profileId));
+        return this.searchProfiles
+        .map(profileId => this.profiles.get(profileId))
+        .filter(profile => profile !== undefined) as Profile[]; 
     }
 
     searchProfilesByTag = async (nameOrTag : string) => {
