@@ -3,6 +3,7 @@ import { makeAutoObservable } from "mobx";
 import { store } from "./store";
 import { InitialData, Message } from "../model/message";
 import { message } from "antd";
+import { NewChat } from "../model/chat";
 
 export default class ConnectionStore{
     hubConnection: HubConnection | null = null;
@@ -31,9 +32,9 @@ export default class ConnectionStore{
             .build();
 
         this.hubConnection.on('GetChats', (initialdata : InitialData) => {
-            console.log(initialdata.chats)
             store.chatStore.addChats( initialdata.chats);
             store.messageStore.addMessages(initialdata.messages);
+            store.profileStore.addProfiles(initialdata.profiles)
         })
 
         this.hubConnection.on('GetMessage', store.messageStore.getMessage)
@@ -43,7 +44,10 @@ export default class ConnectionStore{
         this.hubConnection.on('ConfirmEditedMessage', store.messageStore.confirmEditedMessage)
 
         this.hubConnection.on('ConfirmCreatePersonalChat', store.chatStore.confirmCreatePersonalChat)
-        this.hubConnection.on('NewPersonalChat', store.chatStore.addNewPersonalChat)
+        this.hubConnection.on('NewPersonalChat', (newChat : NewChat) => {
+             store.chatStore.addNewPersonalChat(newChat.newPersonalChat)
+             store.profileStore.addProfiles(newChat.profiles)
+        })
 
         this.hubConnection.on('ConfirmDeletePersonalChat', store.chatStore.confirmDeletePersonalChat)
         this.hubConnection.on('DeletedPersonalChat', store.chatStore.deleteLocalyPersonalChat)

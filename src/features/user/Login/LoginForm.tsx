@@ -5,6 +5,7 @@ import { Input, Button, Alert } from "antd";
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
 import FormItem from "antd/es/form/FormItem";
 import './LoginForm.css'
+import { Link } from "react-router-dom";
 
 
 function LoginForm() {
@@ -91,6 +92,12 @@ function LoginForm() {
               Log in
             </Button>
           </FormItem>
+
+          <Link to='/register'>
+                    <Button>
+                        Register
+                    </Button>
+                </Link>
         </Form>
       )}
     </Formik>

@@ -3,10 +3,19 @@ import MessangerPage from '../messanger/MessangerPage';
 import { useStore } from '../../app/store/store';
 import { Button } from 'antd';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
 function MainPage() {
-    const {userStore} = useStore()
+  const {userStore} = useStore()
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!userStore.isLoggedIn) {
+      navigate('/login'); 
+    }
+  }, [userStore.isLoggedIn, navigate]);
 
   return (
     <>
@@ -14,8 +23,6 @@ function MainPage() {
             <> 
                 <MessangerPage />
             </>
-
-            
         ) : (
             <>
                 <Link to='/login'>

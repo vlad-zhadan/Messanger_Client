@@ -1,4 +1,5 @@
 import { Chat } from "./chat"
+import { Profile } from "./user"
 
 export interface MessageToSend { 
     text: string
@@ -37,7 +38,8 @@ export interface MessageReceiver{
 export interface InitialData {
     chats: Chat[], 
     messages: Message[], 
-    recivers: MessageReceiver[]
+    recivers: MessageReceiver[],
+    profiles:  Profile[]
 }
 
 export interface MessageDelete{

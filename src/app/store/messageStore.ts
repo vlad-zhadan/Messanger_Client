@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx"
-import {   Message, MessageDelete, MessageToEdit, MessageToSend } from "../model/message";
+import {   Message, MessageDelete, MessageStatus, MessageToEdit, MessageToSend } from "../model/message";
 import agent from "../api/agent";
 import { store } from "./store";
 
@@ -159,6 +159,7 @@ export default class MessageStore {
             userOwnerId: 0,
             documentId: 0,
             timeSent: new Date().toISOString(),
+            status: 0,
             receiverIds: []
         };
     }
@@ -169,6 +170,37 @@ export default class MessageStore {
 
     handleMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.messageCurrent.text = e.target.value;
+    }
+
+
+    handleSendMessage = (e: React.FormEvent) => {
+        e.preventDefault(); 
+
+        if (this.messageCurrent.text.trim() !== "" && store.chatStore.choosenChat !== null) {
+        const message: MessageToSend = {
+            text: this.messageCurrent.text,
+            chatId: store.chatStore.choosenChat!,
+        };
+
+        this.sendMessage(message);
+        this.setMessageText(""); 
+        }
+    }
+
+    handleSendEdited = (e: React.FormEvent) => {
+        e.preventDefault(); 
+
+        if (this.messageCurrent.text.trim() !== "" && store.chatStore.choosenChat !== null && this.messageCurrent.text !== this.messageToEdit!.text) {
+        const message: MessageToEdit = {
+            newText: this.messageCurrent.text,
+            messageId: this.messageToEdit!.messageId
+        };
+
+        this.editMessage(message);
+        this.setMessageToEdit(undefined);
+        this.setMessageText(""); 
+        this.setIsEditingMessage(false);
+        }
     }
 
 }

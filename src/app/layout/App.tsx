@@ -25,8 +25,5 @@ function App(){
   )
 }
 
-// function App() {
-
-// }
 
 export default observer(App);

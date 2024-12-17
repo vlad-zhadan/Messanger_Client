@@ -1,0 +1,80 @@
+.chat {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.threeDotsIcon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 18px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.chat:hover .threeDotsIcon {
+    opacity: 1;
+}
+
+.privateChat {
+    display: flex;
+}
+
+.photo{
+    width: 20%;
+}
+
+.circleLogo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    margin: 10px;
+
+}
+
+.informPartChatItem {
+    display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        /* Allow the message block to take remaining space */
+        overflow: hidden;
+        /* Prevent overflow */
+}
+
+.nameOfTheGroup {
+    font-weight: bold;
+    display: flex;
+}
+
+.lastMessage {
+    display: flex;
+    align-items: center;
+    font-size: smaller;
+    max-width: 100%;
+}
+
+.lastMessageFullName {
+    margin-right: 5px;
+}
+
+.lastMessageText {
+    flex: 1;
+    color: gray;
+    overflow: hidden;
+    text-overflow: ellipsis; 
+    white-space: nowrap;
+    display: flex;
+    min-width: 0;
+}
+
+span {
+    margin: 3px;
+}

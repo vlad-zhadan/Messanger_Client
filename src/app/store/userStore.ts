@@ -50,5 +50,9 @@ export default class UserStore {
         }
     }
 
+    getFullName = () => {
+        return `${this.user?.profile.firstName} ${this.user?.profile.lastName}`;
+    }
+
 }
 

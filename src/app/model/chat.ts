@@ -1,3 +1,5 @@
+import { Profile } from "./user"
+
 export interface Chat {
     chatId: number
     type: ChatType
@@ -5,15 +7,17 @@ export interface Chat {
     numberOfUnreadMessages: number
     createdAt : string
     lastMessageTime : Date
-}
 
-export interface PersonalChat extends Chat {
-    secondUserId: number
-}
+    secondUserId: number | undefined
 
-export interface GroupChat extends Chat {
     description: string | undefined
     pictureId: number | undefined
+    name: string | undefined
+}
+
+export interface NewChat{
+    newPersonalChat: Chat
+    profiles: Profile[]
 }
 
 enum ChatStatus{

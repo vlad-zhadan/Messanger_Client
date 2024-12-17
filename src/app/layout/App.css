@@ -5,6 +5,10 @@
   text-align: center;
 }
 
+p{
+  margin: 0;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -62,9 +66,6 @@ html,
   background-color: rgba(13, 51, 65, 0.935);
 }
 
-.card{
-
-}
 
 .messageBox{
 
@@ -86,4 +87,21 @@ html,
 .selected{
   background-color: rgba(61, 101, 135, 0.143);
   border-style: dotted;
+}
+
+.leftSpliter{
+    overflow-x: hidden;
+}
+
+.messangerContainer{
+  height: 100%;
+  width: 100%;
+}
+
+.navBar{
+  max-height: 10px;
+}
+
+.messangerGrid{
+  height: 95%;
 }

@@ -4,6 +4,7 @@ export default class CommonStore {
     // error : ServerError | null = null ;
     token: string | null = localStorage.getItem('jwt');
     appLoaded = false;
+    isSearch = false;
 
     constructor(){
         makeAutoObservable(this);
@@ -26,6 +27,10 @@ export default class CommonStore {
 
     setAppLoaded = () => {
         this.appLoaded = true;
+    }
+
+    setSearch = (state : boolean) => {
+        this.isSearch = state;
     }
 
 }

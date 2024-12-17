@@ -3,41 +3,47 @@ import { observer } from "mobx-react-lite";
 import { SearchOutlined } from '@ant-design/icons';
 import { useStore } from "../../app/store/store";
 import { useState } from "react";
-import ProfileContainer from "../profile/ProfileContainer";
+import './SearchElement.css'
+// import ProfileContainer from "../profile/ProfileContainer";
 
 
 function SearchElement(){
-    const { profileStore} = useStore()
+    const { profileStore, commonStore} = useStore()
     const [searchTerm, setSearchTerm] = useState<string>('');
+    const {setSearch} = commonStore
     
     return (
-    <div>
-      <Space style={{ marginBottom: 16 }}>
+    <div className="searchContainer"
+        >
         <Input
           placeholder="Search users by name or tag"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          onClick={() => setSearch(true)}
+          onBlur={() => {
+            setSearchTerm('')
+            setSearch(false)
+          } }
           prefix={<SearchOutlined />}
-          style={{ width: 300 }}
+          style={{ height: "40px" }} 
         />
         <Button
           type="primary"
-          onClick={ () => {profileStore.searchProfilesByTag(searchTerm)}}
+          onMouseDown={(e) => e.preventDefault()} 
+          onClick={() => {
+            profileStore.searchProfilesByTag(searchTerm)
+
+          } }
+          style={{ height: "40px", lineHeight: "40px" }} 
         >
           Find
         </Button>
-      </Space>
-
-      <div className="profiles">
-        {profileStore.SearchResultProfiles.map((profile, index) => (
-            <ProfileContainer  
-                key={index}  
-                profile={profile}         
-                />
-        ))}
-      </div>
     </div>
   );
+
+     
+ 
+  
 }
 
 export default observer(SearchElement)

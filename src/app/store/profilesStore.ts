@@ -19,6 +19,21 @@ export default class ProfileStore {
         .filter(profile => profile !== undefined) as Profile[]; 
     }
 
+    getFullNameOfProfile = (profileId : number) => {
+        const profile = store.profileStore.profiles.get(profileId);
+        return profile ? `${profile.firstName} ${profile.lastName}` : "Unknown User";
+    }
+
+    addProfile = (profile : Profile) => {
+         this.profiles.set(profile.profileId, profile);
+    }
+
+    addProfiles = (profiles : Profile[]) => {
+        profiles.forEach(profile => {
+            this.addProfile(profile);
+        })
+    }
+
     searchProfilesByTag = async (nameOrTag : string) => {
         const profiles = await agent.Profile.search(nameOrTag);
         runInAction(() => {

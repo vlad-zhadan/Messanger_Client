@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import { Chat, ChatType, PersonalChat } from "../model/chat";
+import { Chat, ChatType, NewChat} from "../model/chat";
 import { store } from "./store";
 
 export default class ChatStore { 
@@ -30,6 +30,45 @@ export default class ChatStore {
             });
     }
 
+    getChatName = (chatId: number) => {
+        const chat = this.chats.get(chatId);
+        if (!chat) return undefined;
+
+        if (chat.type === ChatType.PersonalChat) {
+            return store.profileStore.getFullNameOfProfile(chat.secondUserId!)
+        }
+
+        return chat.name!;
+    };
+
+    getChatLastCommentText = (chatId: number) => {
+        const chat = this.chats.get(chatId);
+        if (!chat) return undefined;
+
+        if(chat.lastMessageId){
+            const lastMessage = store.messageStore.messages.get(chatId)?.get(chat.lastMessageId)
+            return lastMessage?.text
+        }
+
+        return "Chat is empty"
+    }
+
+    getChatLastCommentFullName = (chatId : number) => {
+        const chat = this.chats.get(chatId);
+        if (!chat) return undefined;
+
+        if(!chat.lastMessageId){
+            return ""
+        }
+
+        const lastMessage = store.messageStore.messages.get(chatId)?.get(chat.lastMessageId)
+        if(lastMessage?.userOwnerId! == store.userStore.user?.profile.profileId){
+            return store.userStore.getFullName()
+        }
+
+        return store.profileStore.getFullNameOfProfile(lastMessage?.userOwnerId!)
+    }
+
     addChats = (chats : Chat[]) => {
         chats.forEach(chat => {
             store.chatStore.chats.set(chat.chatId, chat)
@@ -46,6 +85,7 @@ export default class ChatStore {
 
     setChoosenChat = (id: number) =>{
             this.choosenChat = id; 
+
     }
 
     markHistoryFetched = (chatId: number) =>{
@@ -59,10 +99,10 @@ export default class ChatStore {
         
         const chat = Array.from(this.chats.values())
         .find(chat => chat.type === ChatType.PersonalChat &&
-            (chat as PersonalChat).secondUserId === store.profileStore.choosenProfile);
+            chat.secondUserId === store.profileStore.choosenProfile);
 
 
-        return chat ? (chat as PersonalChat).chatId : undefined;  
+        return chat ? chat.chatId : undefined;  
     }
 
     createPersonalChat = async ( ) => {

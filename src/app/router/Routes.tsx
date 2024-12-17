@@ -1,8 +1,10 @@
 import { createBrowserRouter, RouteObject } from "react-router-dom";
 import App from "../layout/App";
 import LoginForm from "../../features/user/Login/LoginForm";
-import HomePage from "../../features/home/HomePage";
 import RegisterForm from "../../features/user/Register/RegisterForm";
+import ChatContainer from "../../features/messanger/ChatContainer";
+import MainPage from "../../features/home/MainPage";
+import MessangerPage from "../../features/messanger/MessangerPage";
 
 export const routes: RouteObject [] = [
     {
@@ -11,7 +13,14 @@ export const routes: RouteObject [] = [
         children: [
             {
                 path: '',
-                element: <HomePage />
+                element: <MainPage />,
+                children: [
+                    {
+                        path: 'chat/:id',
+                        element: <ChatContainer />
+                        }
+                    
+                ]
             },
             {
                 path: 'login',
@@ -21,6 +30,8 @@ export const routes: RouteObject [] = [
                 path: 'register',
                 element: <RegisterForm />
             }
+            
+            
         ]
     }
 
