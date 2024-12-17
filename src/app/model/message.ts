@@ -13,6 +13,14 @@ export interface Message {
     documentId : number
     timeSent: string
     receiverIds : number[]
+    status : MessageStatus
+}
+
+export enum MessageStatus
+{
+    Normal=0,
+    Edited=1,
+    Deleted=2,
 }
 
 export interface MessageToEdit{
@@ -30,4 +38,9 @@ export interface InitialData {
     chats: Chat[], 
     messages: Message[], 
     recivers: MessageReceiver[]
+}
+
+export interface MessageDelete{
+    messageId : number
+    chatId: number
 }

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Button, Splitter } from 'antd';
 import { useStore } from '../../app/store/store';
-import { MessageToSend } from '../../app/model/message';
+import { MessageStatus, MessageToEdit, MessageToSend } from '../../app/model/message';
 import '../../app/layout/App.css'
 import SearchElement from '../search/SearchElement';
 import ModalContainer from '../../app/common/modals/ModalContainer';
@@ -10,10 +10,10 @@ import ModalContainer from '../../app/common/modals/ModalContainer';
 
 function MessangerPage() {
   const { messageStore, chatStore, connectionStore, userStore } = useStore();
-  const { sendMessage,  MessagesInGroup, loadOldMessages} = messageStore;
+  const { sendMessage,  MessagesInGroup, loadOldMessages, deleteMessage, messageCurrent, handleMessageChange, setMessageText, chooseMessegeToEdit, isEditingMessage, messageToEdit , editMessage, setMessageToEdit, setIsEditingMessage} = messageStore;
   const {choosenChat, setChoosenChat, Chats} = chatStore;
 
-  const [messageText, setMessageText] = useState(""); 
+  // const [messageText, setMessageText] = useState(""); 
 
   useEffect(() => {
     if(userStore.user){
@@ -35,21 +35,37 @@ function MessangerPage() {
       console.log("Chats in MessengerPage:", Chats); // Log Chats whenever it updates
   }, [messageStore]);
 
-  const handleMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMessageText(e.target.value);
-  };
+  // const handleMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setMessageText(e.target.value);
+  // };
 
   const handleSendMessage = (e: React.FormEvent) => {
-    e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault(); 
 
-    if (messageText.trim() !== "" && choosenChat !== null) {
+    if (messageCurrent.text.trim() !== "" && choosenChat !== null) {
       const message: MessageToSend = {
-        text: messageText,
+        text: messageCurrent.text,
         chatId: choosenChat!,
       };
 
       sendMessage(message);
-      setMessageText(""); // Clear message text after sending
+      setMessageText(""); 
+    }
+  };
+
+  const handleSendEdited = (e: React.FormEvent) => {
+    e.preventDefault(); 
+
+    if (messageCurrent.text.trim() !== "" && choosenChat !== null && messageCurrent.text !== messageToEdit!.text) {
+      const message: MessageToEdit = {
+        newText: messageCurrent.text,
+        messageId: messageToEdit!.messageId
+      };
+
+      editMessage(message);
+      setMessageToEdit(undefined);
+      setMessageText(""); 
+      setIsEditingMessage(false);
     }
   };
 
@@ -84,7 +100,7 @@ function MessangerPage() {
     </Splitter.Panel>
     <Splitter.Panel className='rightSpliter'>
         <div className="card">
-        <form onSubmit={handleSendMessage} className='messageBox'>
+        <form onSubmit={isEditingMessage ? handleSendEdited : handleSendMessage} className='messageBox'>
           
           
 
@@ -93,14 +109,24 @@ function MessangerPage() {
             <input
               type="text"
               id="messageText"
-              value={messageText}
+              value={messageCurrent?.text}
               onChange={handleMessageChange}
               placeholder="Type a message..."
               required
             />
           </div>
 
-          <button type="submit">Send Message</button>
+          
+
+          {isEditingMessage ? (
+            <>
+              <button type="submit">Send Edited</button>
+              <button type="submit">Cancel</button>
+            </>
+            
+          ) : (
+            <button type="submit">Send Message</button>
+          )}
         </form>
       </div>
 
@@ -108,9 +134,30 @@ function MessangerPage() {
         {MessagesInGroup.map((message, index) => (
           <div key={index} className="message">
             <div>
-              <strong>User {message.userOwnerId}</strong> (Chat ID: {message.chatId})
+              <strong>User {message.userOwnerId}</strong>
             </div>
             <div>{message.text}</div>
+            {message.status == MessageStatus.Edited && (
+              <p>edited</p>
+            )}
+            {message.userOwnerId === userStore.user?.profile.profileId && (
+              <>
+                <button
+                className="delete-button"
+                onClick={() => deleteMessage(message.messageId)}
+              >
+                Delete
+              </button>
+
+              <button
+                className="edit-button"
+                onClick={() => chooseMessegeToEdit(message.messageId)}
+              >
+                Edit
+              </button>
+              </>
+              
+            )}
           </div>
         ))}
       </div>

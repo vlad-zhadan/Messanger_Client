@@ -92,7 +92,6 @@ export default class ChatStore {
     deletePersonalChat = async () => {
         if(!this.choosenChat) return 
         try{
-            console.log(this.choosenChat)
             await store.connectionStore.hubConnection?.invoke('DeletePersonalChat', this.choosenChat)
         }catch(error){
              console.log(error);

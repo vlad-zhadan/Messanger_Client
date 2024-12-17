@@ -37,6 +37,10 @@ export default class ConnectionStore{
         })
 
         this.hubConnection.on('GetMessage', store.messageStore.getMessage)
+        this.hubConnection.on('ReceiveDeletedMessage', store.messageStore.receiveDeleteMessage)
+        this.hubConnection.on('ConfirmDeleteMessage', store.messageStore.confirmDeleteMessage)
+        this.hubConnection.on('ReceiveEditedMessage', store.messageStore.receiveEditedMessage)
+        this.hubConnection.on('ConfirmEditedMessage', store.messageStore.confirmEditedMessage)
 
         this.hubConnection.on('ConfirmCreatePersonalChat', store.chatStore.confirmCreatePersonalChat)
         this.hubConnection.on('NewPersonalChat', store.chatStore.addNewPersonalChat)

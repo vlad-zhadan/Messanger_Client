@@ -1,13 +1,17 @@
 import { makeAutoObservable } from "mobx"
-import {   Message, MessageToSend } from "../model/message";
+import {   Message, MessageDelete, MessageToEdit, MessageToSend } from "../model/message";
 import agent from "../api/agent";
 import { store } from "./store";
 
 export default class MessageStore { 
     messages = new Map<number, Map<number, Message>>();
+    messageCurrent : Message  
+    messageToEdit : Message | undefined;
+    isEditingMessage = false
   
     constructor () { 
         makeAutoObservable(this);
+        this.messageCurrent = this.createEmptyMessage()
     }
 
     get MessagesInGroup() {
@@ -67,6 +71,104 @@ export default class MessageStore {
                 store.connectionStore.setLoading(false);
             }  
         }
+    }
+
+    deleteMessage = async (messageId : number) => {
+        try{
+            await store.connectionStore.hubConnection?.invoke('DeleteMessage', messageId)
+        }catch(error){
+             console.log(error);
+        }
+    }
+
+    confirmDeleteMessage = (messageId : number) => {
+        if(messageId < 0) return console.log("error deleting message")
+    }
+
+    receiveDeleteMessage = (deleteMessage : MessageDelete) =>{
+        const chatMessages = this.messages.get(deleteMessage.chatId)
+        chatMessages?.delete(deleteMessage.messageId);
+
+        if(store.chatStore.chats.get(deleteMessage.chatId)!.lastMessageId == deleteMessage.messageId) {
+            this.updateLastMessage(deleteMessage.chatId)
+        }
+    }
+
+    updateLastMessage = (chatId: number) => { 
+        const chat = store.chatStore.chats.get(chatId)
+        if(!chat) return console.log("chat doesnt exist")
+        const newLastMessageId = this.getLastMessageIdForGroup(chatId)
+        chat.lastMessageId = newLastMessageId;
+
+        store.chatStore.chats.set(chat.chatId, chat)
+    }
+
+    getLastMessageIdForGroup = (chatId : number) => {
+        const messagesForChat = this.messages.get(chatId);
+        if (messagesForChat && messagesForChat.size > 0) {
+            const messageIds = Array.from(messagesForChat.keys());
+            const lastMessageId = Math.max(...messageIds);
+
+            return lastMessageId;
+        }
+        return undefined; 
+    }
+
+    chooseMessegeToEdit = (messageId : number ) => {
+        const messagesForChat = this.messages.get(store.chatStore.choosenChat!);
+        const message = messagesForChat?.get(messageId)
+        this.setMessageToEdit(message)
+        this.setMessageText(message?.text!)
+        this.setIsEditingMessage(true)
+    }
+
+    setIsEditingMessage = (status : boolean) => {
+        this.isEditingMessage = status
+    }
+
+    setMessageToEdit = (message : Message | undefined) => {
+        this.messageToEdit = message;
+    }
+
+    editMessage = async (message : MessageToEdit) => {
+         try {
+            await store.connectionStore.hubConnection?.invoke('EditMessage', message);
+        } catch (error) {
+            console.log(error);
+        }   
+    }
+
+    confirmEditedMessage = (messageId : number) =>{
+        if(messageId < 0) return console.log("error deleting message")
+    }
+
+    receiveEditedMessage = (message : Message) =>{
+        console.log("get")
+        const chatMessages = this.messages.get(message.chatId)
+        const messageToEdit = chatMessages?.get(message.messageId);
+        messageToEdit!.text = message.text
+        messageToEdit!.status = message.status
+    }
+
+
+    createEmptyMessage = () =>{
+        return {
+            messageId: 0,
+            chatId: 0,
+            text: '',
+            userOwnerId: 0,
+            documentId: 0,
+            timeSent: new Date().toISOString(),
+            receiverIds: []
+        };
+    }
+
+    setMessageText = (messageText : string ) => {
+        this.messageCurrent.text = messageText
+    }
+
+    handleMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        this.messageCurrent.text = e.target.value;
     }
 
 }
