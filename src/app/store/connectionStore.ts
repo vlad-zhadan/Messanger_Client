@@ -17,7 +17,6 @@ export default class ConnectionStore{
     }
 
     createHubConnection = () => {
-        this.setLoading(true)
         if (this.hubConnection && (this.hubConnection.state === HubConnectionState.Connected || this.hubConnection.state === HubConnectionState.Connecting)) {
             console.log("Hub connection already exists or is in progress.");
             return;
@@ -31,19 +30,22 @@ export default class ConnectionStore{
             .configureLogging(LogLevel.Information)
             .build();
 
-        this.hubConnection.start().catch(error => console.log('Eror:', error));
-
         this.hubConnection.on('GetChats', (initialdata : InitialData) => {
             console.log(initialdata.chats)
             store.chatStore.addChats( initialdata.chats);
             store.messageStore.addMessages(initialdata.messages);
         })
-        this.setLoading(false)
 
         this.hubConnection.on('GetMessage', store.messageStore.getMessage)
 
         this.hubConnection.on('ConfirmCreatePersonalChat', store.chatStore.confirmCreatePersonalChat)
         this.hubConnection.on('NewPersonalChat', store.chatStore.addNewPersonalChat)
+
+        this.hubConnection.on('ConfirmDeletePersonalChat', store.chatStore.confirmDeletePersonalChat)
+        this.hubConnection.on('DeletedPersonalChat', store.chatStore.deleteLocalyPersonalChat)
+
+
+        this.hubConnection.start().catch(error => console.log('Eror:', error));
     }
 
     stopHubConnection = () => {

@@ -1,3 +1,4 @@
+import { makeAutoObservable } from "mobx";
 import { Chat, ChatType, PersonalChat } from "../model/chat";
 import { store } from "./store";
 
@@ -7,22 +8,26 @@ export default class ChatStore {
     choosenChat: number | undefined
     chatLoading = false
 
-    get Chats() {
-        console.log(Array.from(this.chats.values()))
-        return Array.from(this.chats.values())
-            // .map(chat => {
-            //     const lastMessage = chat.lastMessageId !== undefined 
-            //         ? store.messageStore.messages.get(chat.chatId)?.get(chat.lastMessageId)
-            //         : undefined;
+     constructor () { 
+            makeAutoObservable(this);
+    }
 
-            //     return {
-            //         ...chat,
-            //         lastMessageTime: lastMessage ? new Date(lastMessage.timeSent) : new Date(chat.createdAt)
-            //     };
-            // })
-            // .sort((a, b) => {
-            //     return b.lastMessageTime.getTime() - a.lastMessageTime.getTime();
-            // });
+    get Chats() {
+        
+        return Array.from(this.chats.values())
+            .map(chat => {
+                const lastMessage = chat.lastMessageId !== undefined 
+                    ? store.messageStore.messages.get(chat.chatId)?.get(chat.lastMessageId)
+                    : undefined;
+
+                return {
+                    ...chat,
+                    lastMessageTime: lastMessage ? new Date(lastMessage.timeSent) : new Date(chat.createdAt)
+                };
+            })
+            .sort((a, b) => {
+                return b.lastMessageTime.getTime() - a.lastMessageTime.getTime();
+            });
     }
 
     addChats = (chats : Chat[]) => {
@@ -40,7 +45,6 @@ export default class ChatStore {
     }
 
     setChoosenChat = (id: number) =>{
-            console.log(id)
             this.choosenChat = id; 
     }
 
@@ -63,7 +67,7 @@ export default class ChatStore {
 
     createPersonalChat = async ( ) => {
         try{
-            console.log(store.profileStore.choosenProfile)
+
             await store.connectionStore.hubConnection?.invoke('CreatePersonalChat', store.profileStore.choosenProfile)
         }catch(error){
              console.log(error);
@@ -75,7 +79,6 @@ export default class ChatStore {
             console.log('error creating chat ')
             return;
         } 
-        console.log("confirm create");
         this.chats.set(chat.chatId, chat);
     }
 
@@ -83,10 +86,32 @@ export default class ChatStore {
         if(this.chats.get(chat.chatId)){
             return
         }
-        console.log("i get new personal chat");
         this.chats.set(chat.chatId, chat);
     }
 
+    deletePersonalChat = async () => {
+        if(!this.choosenChat) return 
+        try{
+            console.log(this.choosenChat)
+            await store.connectionStore.hubConnection?.invoke('DeletePersonalChat', this.choosenChat)
+        }catch(error){
+             console.log(error);
+        }
+    }
 
+    confirmDeletePersonalChat = (chatId : number | undefined) => {
+        if(!chatId){
+            console.log('error deleting chat ')
+            return;
+        } 
+        this.chats.delete(chatId);
+    }
+
+    deleteLocalyPersonalChat = (chatId : number) => {
+        if(!this.chats.get(chatId)){
+            return
+        }
+        this.chats.delete(chatId);
+    }
 
 }

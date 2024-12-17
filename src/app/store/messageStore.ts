@@ -5,8 +5,7 @@ import { store } from "./store";
 
 export default class MessageStore { 
     messages = new Map<number, Map<number, Message>>();
-    userId: number | undefined
-    
+  
     constructor () { 
         makeAutoObservable(this);
     }
@@ -25,10 +24,6 @@ export default class MessageStore {
         messages.forEach((message) => {
             this.addMessage(message);
         });
-    }
-    
-    setUserId = (id: number) => {
-        this.userId = id;
     }
 
     addMessage = (message : Message) => {
@@ -64,7 +59,7 @@ export default class MessageStore {
                     this.addMessage(message);
                 });
 
-                
+                store.connectionStore.setLoading(false);
                 store.chatStore.markHistoryFetched(store.chatStore.choosenChat!); 
      
             } catch (error) {

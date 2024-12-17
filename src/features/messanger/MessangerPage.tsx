@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Splitter } from 'antd';
+import { Button, Splitter } from 'antd';
 import { useStore } from '../../app/store/store';
 import { MessageToSend } from '../../app/model/message';
 import '../../app/layout/App.css'
@@ -9,21 +9,21 @@ import ModalContainer from '../../app/common/modals/ModalContainer';
 
 
 function MessangerPage() {
-  const { messageStore, chatStore, connectionStore } = useStore();
-  const { sendMessage, userId, setUserId ,  MessagesInGroup, loadOldMessages} = messageStore;
+  const { messageStore, chatStore, connectionStore, userStore } = useStore();
+  const { sendMessage,  MessagesInGroup, loadOldMessages} = messageStore;
   const {choosenChat, setChoosenChat, Chats} = chatStore;
 
-  const [messageText, setMessageText] = useState(""); // Message input
+  const [messageText, setMessageText] = useState(""); 
 
   useEffect(() => {
-    if (userId !== null) {
-      connectionStore.createHubConnection();
+    if(userStore.user){
+        connectionStore.createHubConnection();
     }
-
+    
     return () => {
       connectionStore.stopHubConnection();
     };
-  }, [connectionStore, userId]);
+  }, [connectionStore, userStore.user]);
 
   useEffect(() => {
     if (chatStore.choosenChat && !chatStore.chatsHistory.get(chatStore.choosenChat)) {
@@ -74,6 +74,9 @@ function MessangerPage() {
             >
               <strong>Group {group.chatId}</strong> 
             </div>
+            <Button onClick={() => chatStore.deletePersonalChat()}>
+              Delete Chat
+            </Button>
 
           </div>
         ))}
