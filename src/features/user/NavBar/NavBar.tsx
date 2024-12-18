@@ -2,6 +2,7 @@ import { Avatar, Dropdown, Layout, Menu } from "antd";
 import { Header } from "antd/es/layout/layout";
 import { observer } from "mobx-react-lite";
 import { UserOutlined, LogoutOutlined, SettingOutlined } from "@ant-design/icons";
+import './NavBar.css'
 
 function NavBar (){
     const menu = (
@@ -16,32 +17,22 @@ function NavBar (){
     )
 
     return (
-        <Layout>
-      <Header
-        style={{
-          height: "6%",
-          padding: "0 20px",
-          backgroundColor: "rgba(13, 13, 80, 0.76)",
-          display: "flex",
-          justifyContent: "flex-end",
-          alignItems: "center",
-          borderBottom: "1px solidrgb(38, 56, 128)",
-        }}
-      >
-          
-
-          <Dropdown overlay={menu} placement="bottomRight">
-         <Avatar
-            icon={<UserOutlined />}
-            size={'small'}
-            style={{
-              margin: "2px"
-            }}
-          />
-        </Dropdown>
         
-      </Header>
-    </Layout>
+            <div className="headerNavBar">
+                <Dropdown overlay={menu} placement="bottomRight">
+                    <div className="navBarAvater">
+                        <Avatar
+                            icon={<UserOutlined />}
+                            size={'small'}
+                            style={{
+                            margin: "2px"
+                            }}
+                        />
+                    </div>
+                </Dropdown>
+            </div>
+      
+    
     )
 }
 

@@ -5,6 +5,7 @@ import RegisterForm from "../../features/user/Register/RegisterForm";
 import ChatContainer from "../../features/messanger/ChatContainer";
 import MainPage from "../../features/home/MainPage";
 import MessangerPage from "../../features/messanger/MessangerPage";
+import SelectChat from "../../features/chat/SelectChat";
 
 export const routes: RouteObject [] = [
     {
@@ -18,7 +19,11 @@ export const routes: RouteObject [] = [
                     {
                         path: 'chat/:id',
                         element: <ChatContainer />
-                        }
+                    },
+                    {
+                        path: '',
+                        element: <SelectChat />
+                    }
                     
                 ]
             },

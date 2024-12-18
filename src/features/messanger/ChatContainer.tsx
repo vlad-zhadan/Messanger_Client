@@ -1,76 +1,55 @@
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../app/store/store";
-import { MessageStatus } from "../../app/model/message";
+import MessageInput from "./MessageInput";
+import MessageItem from "./MessageItem";
+import { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import './Chat.css'
 
 function ChatContainer () {
-      const { messageStore, userStore } = useStore();
-      const { handleSendMessage,  MessagesInGroup, deleteMessage, messageCurrent, handleMessageChange, chooseMessegeToEdit, isEditingMessage, handleSendEdited} = messageStore;
-
+    const { messageStore, chatStore } = useStore();
+    const { MessagesInGroup} = messageStore;
+    const navigate = useNavigate();
       
+    useEffect(() => {
+        if (!chatStore.choosenChat) {
+            navigate('/'); 
+        }
+    }, [chatStore.choosenChat, navigate]);
+
+    
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    const scrollToBottom = () => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: 'auto' });
+        }
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [MessagesInGroup]);
+
     return (
          <div className="chatWithMessages">
-        <div className="card">
-          <form onSubmit={isEditingMessage ? handleSendEdited : handleSendMessage} className='messageBox'>
-    
-            <div>
-              <label htmlFor="messageText">Message</label>
-              <input
-                type="text"
-                id="messageText"
-                value={messageCurrent?.text}
-                onChange={handleMessageChange}
-                placeholder="Type a message..."
-                required
-              />
+            <div className="headerProfile">
+                IVAN
             </div>
-
-            
-
-            {isEditingMessage ? (
-              <>
-                <button type="submit">Send Edited</button>
-                <button type="submit">Cancel</button>
-              </>
-              
-            ) : (
-              <button type="submit">Send Message</button>
-            )}
-          </form>
-        </div>
-
-        <div className="messages">
-          {MessagesInGroup.map((message, index) => (
-            <div key={index} className="message">
-              <div>
-                <strong>User {message.userOwnerId}</strong>
-              </div>
-              <div>{message.text}</div>
-              {message.status == MessageStatus.Edited && (
-                <p>edited</p>
-              )}
-              {message.userOwnerId === userStore.user?.profile.profileId && (
-                <>
-                  <button
-                  className="delete-button"
-                  onClick={() => deleteMessage(message.messageId)}
-                >
-                  Delete
-                </button>
-
-                <button
-                  className="edit-button"
-                  onClick={() => chooseMessegeToEdit(message.messageId)}
-                >
-                  Edit
-                </button>
-                </>
-                
-              )}
+            <div className="messageContainer">
+                <div className="messages">
+                    {MessagesInGroup.map((message, index) => (
+                            <MessageItem key={index} message={message} />
+                    ))}
+                    <div ref={messagesEndRef} />
+                </div>
             </div>
-          ))}
-        </div>
+            <div className="messageInputContainer">
+                {/* <MessageInput /> */}
+                INPUT
+            </div>
+           
       
-      </div>
+        </div>
     );
 
 }

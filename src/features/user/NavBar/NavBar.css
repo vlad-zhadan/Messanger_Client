@@ -1,0 +1,12 @@
+.headerNavBar{
+    background-color: rgba(13, 13, 80, 0.76);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100%;
+}
+
+.navBarAvater{
+    margin-right: 10px;
+    
+}

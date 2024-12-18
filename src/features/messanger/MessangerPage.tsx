@@ -42,21 +42,20 @@ function MessangerPage() {
   return (
 
     <div className="messangerContainer">
-      <NavBar />
-
-      <Row className="messangerGrid">
-        <Col className="rightSpliter" xs={{ span: 8}} lg={{ span: 8}}>
+      <div className="navBar">
+        <NavBar />
+      </div>
+      
+      <div className="messangerGrid">
+        <div className="chatsColoumn">
           <SearchElement />
           <SearchProfiles />
           <ChatList />
-        </Col>
-
-        <Col className="leftSpliter" xs={{ span: 16}} lg={{ span: 16}}>
+        </div>
+        <div className="messagesColumn">
           <Outlet />
-          
-        </Col>
-      </Row>
-
+        </div>
+      </div>
     </div>
 
     
