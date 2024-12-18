@@ -75,5 +75,30 @@ display: flex;
 
 .myMessage{
     margin-left: auto;
+    position: relative;
+
+    display: flex;
+        align-items: center;
+        /* Center vertically */
+        justify-content: center;
+        /* Center horizontally if needed */
+}
+
+.threeDotsIconMessage {
+    position: absolute;
+    top: 50%;
+    left: -20px;
+    font-size: 18px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    transform: translate(-50%, -50%);
+
+    display: flex;
+    justify-content: center;
+    margin: 0;
+}
+
+.myMessage:hover .threeDotsIconMessage {
+    opacity: 1;
 }
 

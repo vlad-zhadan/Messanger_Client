@@ -2,6 +2,8 @@ import { observer } from "mobx-react-lite"
 import { Message, MessageStatus } from "../../app/model/message"
 import { useStore } from "../../app/store/store";
 import './Chat.css'
+import { Dropdown, Menu } from "antd";
+import { EllipsisOutlined } from '@ant-design/icons';
 
 interface MessageProps{
     message: Message
@@ -11,7 +13,26 @@ function MessageItem({message} : MessageProps){
     const { messageStore, userStore } = useStore();
     const { deleteMessage, chooseMessegeToEdit} = messageStore;
     
-          
+    const menu = (
+    <Menu>
+        <Menu.Item key="1">
+            <button
+                  className="delete-button"
+                  onClick={() => deleteMessage(message.messageId)}
+                >
+                  Delete
+                </button>
+        </Menu.Item>
+        <Menu.Item key="2">
+            <button
+                  className="edit-button"
+                  onClick={() => chooseMessegeToEdit(message.messageId)}
+                >
+                  Edit
+                </button>
+        </Menu.Item>
+    </Menu>
+    );      
 
     return (
         <div  
@@ -20,32 +41,26 @@ function MessageItem({message} : MessageProps){
                 }`
         }
         >
-              <div>
-                <strong>User {message.userOwnerId}</strong>
-              </div>
-              <div>{message.text}</div>
-              {message.status == MessageStatus.Edited && (
-                <p>edited</p>
-              )}
-              {message.userOwnerId == userStore.user?.profile.profileId && (
-                <>
-                  <button
-                  className="delete-button"
-                  onClick={() => deleteMessage(message.messageId)}
-                >
-                  Delete
-                </button>
-
-                <button
-                  className="edit-button"
-                  onClick={() => chooseMessegeToEdit(message.messageId)}
-                >
-                  Edit
-                </button>
-                </>
-                
-              )}
+            <div className="messageText">
+                {message.text}
             </div>
+              
+            {message.status == MessageStatus.Edited && (
+                <div className="editedElement">
+                    <p>edited</p>
+                </div>
+            )}
+
+            {message.userOwnerId == userStore.user?.profile.profileId && (
+                <Dropdown
+                    overlay={menu}
+                    trigger={['click']}
+                    className="threeDotsDropdown"
+                >
+                    <EllipsisOutlined className="threeDotsIconMessage" />
+                </Dropdown>
+            )}
+        </div>
     )
 }
 
