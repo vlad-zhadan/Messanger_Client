@@ -33,4 +33,9 @@ export default class CommonStore {
         this.isSearch = state;
     }
 
+    getRandomColor = (chatId: number) => {
+        const colors = ['#ff5733', '#33ff57', '#3357ff', '#f1c40f', '#8e44ad', '#e74c3c'];
+        return colors[chatId % colors.length]; 
+    };
+
 }

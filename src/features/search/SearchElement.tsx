@@ -32,7 +32,7 @@ function SearchElement(){
           onMouseDown={(e) => e.preventDefault()} 
           onClick={() => {
             profileStore.searchProfilesByTag(searchTerm)
-
+            
           } }
           style={{ height: "40px", lineHeight: "40px" }} 
         >

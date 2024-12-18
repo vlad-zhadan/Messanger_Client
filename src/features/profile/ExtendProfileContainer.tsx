@@ -19,8 +19,13 @@ function ExtendProfileContainer(){
             </div>
             {chatStore.getPersonalChatIdForUser() ? 
             (
-                <Link to='/chat/{chatStore.getPersonalChatIdForUser(profile.profileId)}'>
-                    <Button>
+                <Link to={`/chat/${chatStore.getPersonalChatIdForUser()}`}>
+                    <Button
+                        onClick={() => {
+                            modalStore.closeModal()
+                            chatStore.setChoosenChat(chatStore.getPersonalChatIdForUser()!)
+                        }}
+                    >
                         Go to the chat
                     </Button>
                 </Link>

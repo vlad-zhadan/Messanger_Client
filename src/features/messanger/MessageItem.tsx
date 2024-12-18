@@ -40,16 +40,19 @@ function MessageItem({message} : MessageProps){
             message.userOwnerId === userStore.user?.profile.profileId ? "myMessage" : ""
                 }`
         }
-        >
-            <div className="messageText">
-                {message.text}
-            </div>
-              
-            {message.status == MessageStatus.Edited && (
-                <div className="editedElement">
-                    <p>edited</p>
+        >   
+            <div className="messageContainer">
+                <div className="messageText">
+                    {message.text}
                 </div>
-            )}
+                
+                {message.status == MessageStatus.Edited && (
+                    <div className="editedElement">
+                        <p>edited</p>
+                    </div>
+                )}
+            </div>
+            
 
             {message.userOwnerId == userStore.user?.profile.profileId && (
                 <Dropdown

@@ -7,8 +7,10 @@ import { useNavigate } from "react-router-dom";
 import './Chat.css'
 
 function ChatContainer () {
-    const { messageStore, chatStore } = useStore();
+    const { messageStore, chatStore, profileStore } = useStore();
     const { MessagesInGroup} = messageStore;
+    const {getFullNameOfProfile} = profileStore;
+    const {getChatName} = chatStore
     const navigate = useNavigate();
       
     useEffect(() => {
@@ -33,7 +35,7 @@ function ChatContainer () {
     return (
          <div className="chatWithMessages">
             <div className="headerProfile">
-                IVAN
+                {getChatName(chatStore.choosenChat!)?.toString()}
             </div>
             <div className="messageContainer">
                 <div className="messages">
@@ -44,8 +46,7 @@ function ChatContainer () {
                 </div>
             </div>
             <div className="messageInputContainer">
-                {/* <MessageInput /> */}
-                INPUT
+                <MessageInput />
             </div>
            
       

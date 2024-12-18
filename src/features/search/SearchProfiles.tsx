@@ -14,8 +14,8 @@ function SearchProfiles(){
                 <ProfileContainer  
                     key={index}  
                     profile={profile}         
-                    />
-        ))}
+                />
+            ))}
       </div> 
     )
 

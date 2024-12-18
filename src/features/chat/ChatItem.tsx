@@ -10,14 +10,12 @@ interface ChatItemProps {
 }
 
 function ChatItem({chat} : ChatItemProps){
-        const {  chatStore} = useStore();
+    const {  chatStore, commonStore} = useStore();
     const {choosenChat, setChoosenChat, getChatName, getChatLastCommentText, getChatLastCommentFullName} = chatStore;
+    const {getRandomColor} = commonStore;
     const navigate = useNavigate();
     
-    const getRandomColor = (chatId: number) => {
-        const colors = ['#ff5733', '#33ff57', '#3357ff', '#f1c40f', '#8e44ad', '#e74c3c'];
-        return colors[chatId % colors.length]; 
-    };
+    
 
     const menu = (
     <Menu>

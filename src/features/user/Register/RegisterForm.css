@@ -1,0 +1,27 @@
+.registerFormContainer{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bioContainer {
+    margin: 4px;
+}
+
+.register-form-button{
+    margin: 4px;
+    margin-top: 10px;
+}
+
+.registerFormItem{
+    background-color: rgb(51, 77, 100);
+    padding: 30px;
+    padding-top: 20px;
+    border-radius: 8px;
+}
+
+.submetFormItem {
+    margin: 0px;
+    
+}

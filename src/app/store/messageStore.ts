@@ -124,6 +124,10 @@ export default class MessageStore {
 
     setIsEditingMessage = (status : boolean) => {
         this.isEditingMessage = status
+        if(!status){
+            this.setMessageToEdit(undefined);
+            this.setMessageText(""); 
+        }
     }
 
     setMessageToEdit = (message : Message | undefined) => {

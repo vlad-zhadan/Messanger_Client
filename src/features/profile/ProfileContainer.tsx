@@ -3,30 +3,39 @@ import { Profile } from "../../app/model/user";
 import { useStore } from "../../app/store/store";
 import React from "react";
 import ExtendProfileContainer from "./ExtendProfileContainer";
+import './Profile.css'
 
 interface ProfileProps {
     profile : Profile 
 }
 
 function ProfileContainer({profile} : ProfileProps){
-    const { profileStore, modalStore} = useStore()
+    const { profileStore, modalStore, commonStore, chatStore} = useStore()
+    const {getChatName} = chatStore;
+    const {getRandomColor} = commonStore;
     
     return (
          <div 
-          className="message"
-          onClick={()=> {
-            profileStore.setChoosenProfile(profile?.profileId)
-            modalStore.openModal(
-                <ExtendProfileContainer  />
-            )
-          }
-            
-           
-
-          } 
+            className="profile"
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={()=> {
+              profileStore.setChoosenProfile(profile?.profileId)
+              
+              modalStore.openModal(
+                  <ExtendProfileContainer  />
+              )
+            }} 
           >
+            <div className="photo">
+                <div 
+                    className="circleLogo"
+                    style={{ backgroundColor: getRandomColor(profile?.profileId) }} 
+                >
+                    {profileStore.getFullNameOfProfile(profile?.profileId)?.toString().charAt(0)}
+                </div>
+            </div>
             <div>
-              <strong>User {profile?.firstName}</strong> ({profile?.lastName})
+              {profileStore.getFullNameOfProfile(profile?.profileId)}
             </div>
           </div>
     );

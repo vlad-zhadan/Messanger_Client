@@ -1,16 +1,11 @@
 .chatWithMessages {
     display: grid;
     grid-template-rows: 5% 85% 10%;
-    /* max-height: 100%;
-    max-width: 100%; */
     gap: 0;
     height: 100%;
 
     height: 100%;
-        /* Ensures the parent takes full height */
-        width: 100%;
-        /* Ensures the parent takes full width */
-    
+    width: 100%;  
 }
 
 .headerProfile{
@@ -27,44 +22,28 @@
 }
 
 .messages {
-display: flex;
+    display: flex;
     flex-direction: column;
-    /* Stack messages vertically */
     align-items: flex-start;
-    /* Align messages to the start (left) */
     gap: 10px;
-    /* Optional: Adds spacing between messages */
     overflow-y: auto;
-    /* Enable vertical scrolling */
     overflow-x: hidden;
-    /* Prevent horizontal scrolling */
     padding: 10px;
-    /* Add padding for spacing */
     width: 100%;
-    /* Ensure it takes full width */
     box-sizing: border-box;
-    /* Include padding in width calculations */
-    
-    /* Optional background color */
-
 }
 
 .messageInputContainer {
-    border-top: 1px solid #ccc;
-    background-color: #fff;
-
-
-    
+    /* border-top: 1px solid #ccc;    */
+    width: 100%;
 }
 
 .message{
     background-color: #6e5757;
     display: flex;
     max-width: 60%;
-    /* Limits the message bubble width */
 
     margin: 1px 0;
-    /* Adds spacing between messages */
     padding: 7px;
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -78,10 +57,8 @@ display: flex;
     position: relative;
 
     display: flex;
-        align-items: center;
-        /* Center vertically */
-        justify-content: center;
-        /* Center horizontally if needed */
+    align-items: center;
+    justify-content: center;
 }
 
 .threeDotsIconMessage {
@@ -102,3 +79,58 @@ display: flex;
     opacity: 1;
 }
 
+
+.mesesageContainer {
+    width: 100%;  
+    height: 100%;
+}
+
+.messageBox{
+    height: 100%;
+    /* display: grid;
+    grid-template-columns: 75% 25%; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.messageBoxText{
+    margin: 0 10px;
+  
+    height: 80%;
+    flex: 1;
+}
+
+.messageBoxText input{
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+   
+}
+
+.messageBoxButtons{
+    height: 80%;
+    margin-right: 10px;
+}
+
+.submitButton{
+    height: 100%;
+    width: 100%;
+
+}
+
+.submitEditedMessage{
+    margin-right: 10px;
+}
+
+.messageContainer{
+    display: flex;
+}
+
+.editedElement{
+    display: flex;
+    justify-content: flex-end;
+    font-size: small;
+    color: rgb(152, 165, 165);
+}

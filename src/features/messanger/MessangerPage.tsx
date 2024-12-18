@@ -10,6 +10,7 @@ import SearchProfiles from '../search/SearchProfiles';
 import NavBar from '../user/NavBar/NavBar';
 import ChatContainer from './ChatContainer';
 import { Outlet } from 'react-router-dom';
+import ModalContainer from '../../app/common/modals/ModalContainer';
 
 
 
@@ -42,6 +43,7 @@ function MessangerPage() {
   return (
 
     <div className="messangerContainer">
+      <ModalContainer />
       <div className="navBar">
         <NavBar />
       </div>

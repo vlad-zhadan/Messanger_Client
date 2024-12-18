@@ -16,6 +16,7 @@ export default class ModalStore {
     }
 
     openModal = (content: JSX.Element) => {
+        console.log('click')
         this.modal.open = true;
         this.modal.body = content;
     }
