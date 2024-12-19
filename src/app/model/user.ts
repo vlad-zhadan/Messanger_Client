@@ -23,3 +23,9 @@ export interface UserRegister {
     user: UserLogin;
     profile : ProfileCreate;
 }
+
+export interface LastSeen {
+    profileId : number;
+    isOnline : boolean;
+    lastSeen : string;
+}

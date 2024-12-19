@@ -17,13 +17,13 @@ function ExtendProfileContainer(){
             <div>
               <strong>User {profileStore.ChoosenProfile?.firstName}</strong> ({profileStore.ChoosenProfile?.lastName})
             </div>
-            {chatStore.getPersonalChatIdForUser() ? 
+            {chatStore.getPersonalChatIdForChoosenUser() ? 
             (
-                <Link to={`/chat/${chatStore.getPersonalChatIdForUser()}`}>
+                <Link to={`/chat/${chatStore.getPersonalChatIdForChoosenUser()}`}>
                     <Button
                         onClick={() => {
                             modalStore.closeModal()
-                            chatStore.setChoosenChat(chatStore.getPersonalChatIdForUser()!)
+                            chatStore.setChoosenChat(chatStore.getPersonalChatIdForChoosenUser()!)
                         }}
                     >
                         Go to the chat

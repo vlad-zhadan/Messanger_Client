@@ -9,7 +9,6 @@ export interface Chat {
     lastMessageTime : Date
 
     secondUserId: number | undefined
-
     description: string | undefined
     pictureId: number | undefined
     name: string | undefined

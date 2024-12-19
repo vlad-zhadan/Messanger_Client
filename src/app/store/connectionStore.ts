@@ -52,12 +52,16 @@ export default class ConnectionStore{
         this.hubConnection.on('ConfirmDeletePersonalChat', store.chatStore.confirmDeletePersonalChat)
         this.hubConnection.on('DeletedPersonalChat', store.chatStore.deleteLocalyPersonalChat)
 
+        this.hubConnection.on('ReceiveLastSeenUpdate', store.profileStore.receiveLastSeenUpdate)
+
+        this.hubConnection.on('ConfirmBlockingPersonalChat', store.userStore.confirmBlockUser)
+        this.hubConnection.on('ReceiveBlockedUser', store.userStore.getBlockUser)
 
         this.hubConnection.start().catch(error => console.log('Eror:', error));
     }
 
     stopHubConnection = () => {
-        // this.hubConnection?.stop().catch(error => console.log('Error stopping connection: ', error));
+        this.hubConnection?.stop().catch(error => console.log('Error stopping connection: ', error));
 
         if (this.hubConnection && this.hubConnection.state !== HubConnectionState.Disconnected) {
         this.hubConnection.stop()

@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { Message } from "../model/message";
-import { Profile, User, UserLogin, UserRegister } from "../model/user";
+import { LastSeen, Profile, User, UserLogin, UserRegister } from "../model/user";
 import { store } from "../store/store";
 
 const  sleep = (delay: number) =>{
@@ -38,7 +38,9 @@ const requests = {
 }
 
 const Messages = {
-    list: (id: number) => requests.get<Message[]>(`/personalMessage/${id}`)
+    list: (id: number) => requests.get<Message[]>(`/personalMessage/${id}`),
+    find: (chatId: number, text: string) => requests.get<Message[]>(`/personalMessage/${chatId}/search/${text}`)
+
 }
 
 const Account  = {
@@ -48,7 +50,8 @@ const Account  = {
 }
 
 const Profile = {
-    search : (nameOrTag : string ) => requests.get<Profile[]>(`/profile/search/${nameOrTag}`)
+    search : (nameOrTag : string ) => requests.get<Profile[]>(`/profile/search/${nameOrTag}`),
+    lastSeen : (profileId : number) => requests.get<LastSeen>(`/profile/${profileId}/lastSeen`)
 }
 
 const agent = {

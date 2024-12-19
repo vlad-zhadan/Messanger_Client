@@ -54,5 +54,47 @@ export default class UserStore {
         return `${this.user?.profile.firstName} ${this.user?.profile.lastName}`;
     }
 
+    blockUser = async (profileId : number) => {
+        try{
+            await store.connectionStore.hubConnection?.invoke('BlockUser', profileId)
+        }catch(error){
+             console.log(error);
+        }
+    }
+
+    confirmBlockUser = (profileId : number) => {
+        if(profileId < 0){
+            console.log('error deleting chat ')
+            return
+        } 
+
+        store.profileStore.profiles.delete(profileId);
+        const personalChat = store.chatStore.getPersonalChatForUser(profileId);
+
+        store.chatStore.chats.delete(store.chatStore.choosenChat!);
+        store.messageStore.messages.delete(store.chatStore.choosenChat!);
+
+        if(store.chatStore.choosenChat == profileId){
+            store.chatStore.choosenChat = undefined
+        }
+    }
+
+    getBlockUser = (profileId : number) => { 
+        store.profileStore.profiles.delete(profileId);
+        const personalChat = store.chatStore.getPersonalChatForUser(profileId);
+        if(personalChat){
+            store.chatStore.chats.delete(personalChat);
+            store.messageStore.messages.delete(personalChat);
+        } 
+        if(store.chatStore.choosenChat == profileId){
+            store.chatStore.choosenChat = undefined
+        }
+    }
+
+    cleanBlockUser = (profileId : number) => {
+        
+        
+    }
+
 }
 

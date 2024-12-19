@@ -22,6 +22,7 @@ function MessageInput () {
                     onChange={handleMessageChange}
                     placeholder="Type a message..."
                     required
+                    autoComplete="off" 
                     />
                 </div>
                 <div className="messageBoxButtons">

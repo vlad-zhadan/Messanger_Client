@@ -1,13 +1,15 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
-import { Profile } from "../model/user";
+import { LastSeen, Profile } from "../model/user";
 import { store } from "./store";
+import { ChatType } from "../model/chat";
 
 
 export default class ProfileStore {
     profiles = new Map<number , Profile >();
     searchProfiles : number[] = [];
     choosenProfile : number | undefined;
+    statusOnline = new Map<number , LastSeen >();
 
     constructor(){
         makeAutoObservable(this);
@@ -24,14 +26,58 @@ export default class ProfileStore {
         return profile ? `${profile.firstName} ${profile.lastName}` : "Unknown User";
     }
 
-    addProfile = (profile : Profile) => {
-         this.profiles.set(profile.profileId, profile);
+    getIdOfSecondProfileInPersonalChat = (chatId : number) => {
+        const chat = store.chatStore.chats.get(chatId);
+        if(chat?.type != ChatType.PersonalChat){
+            return 
+        }
+
+        return chat.secondUserId
+    }
+
+    getStatusOfProfile = (chatId : number) => {
+        const chat = store.chatStore.chats.get(chatId);
+        if(chat?.type != ChatType.PersonalChat){
+            return 
+        }
+
+        const status = this.statusOnline.get(chat.secondUserId!)?.isOnline
+        return status 
+    }
+
+    addProfile = async (profile : Profile) => {
+        this.profiles.set(profile.profileId, profile);
+        this.subscribeToLastSeenUpdate(profile.profileId)
+        await this.getLastSeenUpdate(profile.profileId)
     }
 
     addProfiles = (profiles : Profile[]) => {
         profiles.forEach(profile => {
             this.addProfile(profile);
         })
+    }
+
+    getLastSeenUpdate = async (profileId : number) => {
+        const lastSeen = await agent.Profile.lastSeen(profileId);
+        
+        runInAction(() => {
+            console.log("profile ", profileId, " status ", lastSeen.isOnline )
+            this.statusOnline.set(lastSeen.profileId, lastSeen)
+        })
+    }
+
+    subscribeToLastSeenUpdate = async (profileId : number) =>{
+        try{
+            console.log("follow ", profileId)
+            await store.connectionStore.hubConnection?.invoke('SubscribeToLastSeenUpdate', profileId)
+        }catch(error){
+             console.log(error);
+        }
+    }
+
+    receiveLastSeenUpdate = (lastSeen : LastSeen) => {
+        console.log("lastSeen ", lastSeen)
+        this.statusOnline.set(lastSeen.profileId, lastSeen)
     }
 
     searchProfilesByTag = async (nameOrTag : string) => {

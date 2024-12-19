@@ -7,7 +7,7 @@ import './App.css'
 
 
 function App(){
-  const {commonStore, userStore} = useStore();
+  const {commonStore, userStore, connectionStore} = useStore();
 
   useEffect(()=>{
     if(commonStore.token){

@@ -5,11 +5,14 @@ import MessageItem from "./MessageItem";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import './Chat.css'
+import ProfileStatus from "./ProfileStatus";
+import { Dropdown, Menu } from "antd";
+import { EllipsisOutlined } from '@ant-design/icons';
 
 function ChatContainer () {
-    const { messageStore, chatStore, profileStore } = useStore();
+    const { messageStore, chatStore, profileStore, userStore } = useStore();
     const { MessagesInGroup} = messageStore;
-    const {getFullNameOfProfile} = profileStore;
+    const {getFullNameOfProfile, getStatusOfProfile} = profileStore;
     const {getChatName} = chatStore
     const navigate = useNavigate();
       
@@ -32,10 +35,43 @@ function ChatContainer () {
         scrollToBottom();
     }, [MessagesInGroup]);
 
+    const menu = (
+    <Menu>
+        <Menu.Item key="1">
+            <button
+                className="delete-button"
+                onClick={() => {userStore.blockUser(profileStore.getIdOfSecondProfileInPersonalChat(chatStore.choosenChat!)!)}}
+            >
+                Block
+            </button>
+            <button
+                className="delete-button"
+                onClick={() => {messageStore.getMessagesFromSearch("aboba")}}
+            >
+               Search
+            </button>
+        </Menu.Item>
+    </Menu>
+    );      
+
     return (
          <div className="chatWithMessages">
             <div className="headerProfile">
-                {getChatName(chatStore.choosenChat!)?.toString()}
+                <div className="nameOfChat">
+                    {getChatName(chatStore.choosenChat!)?.toString()}
+                </div>
+                <div className="statusOfOnline">
+                    <ProfileStatus />
+                </div>
+                <div className="profileOptions">
+                        <Dropdown
+                        overlay={menu}
+                        trigger={['click']}
+                        className="threeDotsBlockOptions"
+                    >
+                        <EllipsisOutlined style={{ transform: 'rotate(90deg)', fontSize: '20px' }} className="threeDotsBlockOptions" />
+                </Dropdown>
+                </div>
             </div>
             <div className="messageContainer">
                 <div className="messages">

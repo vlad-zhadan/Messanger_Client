@@ -207,4 +207,19 @@ export default class MessageStore {
         }
     }
 
+    getMessagesFromSearch = async (text : string) => {
+        if(store.chatStore.choosenChat){
+            try {
+
+                const messages = await agent.Messages.find(store.chatStore.choosenChat, text);
+
+                console.log(messages)
+     
+            } catch (error) {
+                console.log(error);
+                
+            }  
+        }
+    }
+
 }

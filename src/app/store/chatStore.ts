@@ -92,22 +92,24 @@ export default class ChatStore {
         this.chatsHistory.set(chatId, true)
     }
 
-    getPersonalChatIdForUser = ()=> {
+    getPersonalChatIdForChoosenUser = ()=> {
         if(!store.profileStore.choosenProfile){
             return undefined
         }
         
+        return  this.getPersonalChatForUser(store.profileStore.choosenProfile)
+    }
+
+    getPersonalChatForUser =(profileId : number) => {
         const chat = Array.from(this.chats.values())
         .find(chat => chat.type === ChatType.PersonalChat &&
-            chat.secondUserId === store.profileStore.choosenProfile);
-
+            chat.secondUserId === profileId);
 
         return chat ? chat.chatId : undefined;  
     }
 
     createPersonalChat = async ( ) => {
         try{
-
             await store.connectionStore.hubConnection?.invoke('CreatePersonalChat', store.profileStore.choosenProfile)
         }catch(error){
              console.log(error);

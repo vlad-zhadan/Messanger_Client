@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Col, Row } from 'antd';
+import { Button, Col, Row } from 'antd';
 import { useStore } from '../../app/store/store';
 import { MessageStatus} from '../../app/model/message';
 import '../../app/layout/App.css'
@@ -36,7 +36,10 @@ function MessangerPage() {
     }
   }, [choosenChat]);
 
-  ;
+   window.addEventListener("beforeunload", async () => {
+    connectionStore.stopHubConnection();
+  });
+
 
   if(connectionStore.loading) return <></>
 
