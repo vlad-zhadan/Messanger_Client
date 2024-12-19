@@ -6,12 +6,14 @@ import { store } from "./store";
 export default class MessageStore { 
     messages = new Map<number, Map<number, Message>>();
     messageCurrent : Message  
+    messageCurrentWithMedia : Message
     messageToEdit : Message | undefined;
     isEditingMessage = false
   
     constructor () { 
         makeAutoObservable(this);
         this.messageCurrent = this.createEmptyMessage()
+        this.messageCurrentWithMedia = this.createEmptyMessage()
     }
 
     get MessagesInGroup() {
@@ -70,6 +72,9 @@ export default class MessageStore {
                 
                 messages.forEach(message => {
                     this.addMessage(message);
+                    if(message.fileId){
+                        store.fileStore.getMessageWithPhotoApi(message.messageId);
+                    }
                 });
 
                 store.connectionStore.setLoading(false);
@@ -96,11 +101,17 @@ export default class MessageStore {
 
     receiveDeleteMessage = (deleteMessage : MessageDelete) =>{
         const chatMessages = this.messages.get(deleteMessage.chatId)
+
+        const fileId = chatMessages?.get(deleteMessage.messageId)?.fileId
+        if(fileId){
+            store.fileStore.deleteFileContent(fileId)
+        }
+
         chatMessages?.delete(deleteMessage.messageId);
 
         if(store.chatStore.chats.get(deleteMessage.chatId)!.lastMessageId == deleteMessage.messageId) {
             this.updateLastMessage(deleteMessage.chatId)
-        }
+        }  
     }
 
     updateLastMessage = (chatId: number) => { 
@@ -173,7 +184,8 @@ export default class MessageStore {
             documentId: 0,
             timeSent: new Date().toISOString(),
             status: 0,
-            receiverIds: []
+            fileId : undefined
+           
         };
     }
 
@@ -181,8 +193,16 @@ export default class MessageStore {
         this.messageCurrent.text = messageText
     }
 
+     setMessageMediaText = (messageText : string ) => {
+        this.messageCurrentWithMedia.text = messageText
+    }
+
     handleMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.messageCurrent.text = e.target.value;
+    }
+
+    handleMessageChangeMedia = (e: React.ChangeEvent<HTMLInputElement>) => {
+        this.messageCurrentWithMedia.text = e.target.value;
     }
 
 

@@ -103,10 +103,15 @@
 }
 
 .messageBoxText{
-    margin: 0 10px;
+    margin-right: 10px;
   
     height: 80%;
     flex: 1;
+}
+
+.messageInputContent{
+    margin: 0 10px;
+    height: 100%;
 }
 
 .messageBoxText input{
@@ -119,7 +124,7 @@
 
 .messageBoxButtons{
     height: 80%;
-    margin-right: 10px;
+    /* margin-right: 10px; */
 }
 
 .submitButton{
@@ -167,3 +172,40 @@
 .headerProfile:hover .profileOptions{
     opacity: 1;
 }
+
+.fileContainer {
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.imgContainer {
+    max-width: 100%;
+    /* Ensures the image width does not exceed the container */
+    max-height: 300px;
+    /* Set a reasonable max height for the image */
+    object-fit: contain;
+    /* Maintain aspect ratio, show the full image */
+    border-radius: 8px;
+    /* Add rounded corners for better visuals */
+    margin-bottom: 8px;
+    /* Add spacing between the image and the text */
+    display: block;
+}
+
+.ant-upload{
+    height: 100%;
+}
+
+.previewContainer .imageConteiner{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+
+}
+
+
+.ant-modal-content{
+    background-color: rgb(49, 80, 80) !important;
+}
+

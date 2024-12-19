@@ -9,6 +9,7 @@ export default class FileStore{
     files = new Map<number, FileContent>;
     selectedFile : File | undefined
     loadMessage: number | undefined;
+    isUploadingFile = false
 
     constructor (){
         makeAutoObservable(this)
@@ -23,17 +24,16 @@ export default class FileStore{
         );
     }
 
-    initialFileToSend = () => {
-
+    setIsUploadingFile = (status : boolean) => {
+        this.isUploadingFile = status;
     }
 
     setSelectedFile= (selectedFile : File | undefined) => {
         this.selectedFile = selectedFile;
     }
 
-    handleSendMessageWithPhoto  = async () => {
-        // e: React.FormEvent
-        // e.preventDefault(); 
+    handleSendMessageWithPhoto  = async (e: React.FormEvent) => {
+        e.preventDefault(); 
   
 
         if ( store.chatStore.choosenChat && this.selectedFile) {
@@ -48,7 +48,7 @@ export default class FileStore{
 
 
             const messageWithFile: MessageWithFileSend = {
-                text: store.messageStore.messageCurrent.text,
+                text: store.messageStore.messageCurrentWithMedia.text,
                 chatId: store.chatStore.choosenChat!,
                 fileName: this.selectedFile!.name,
                 fileContent: this.selectedFile,
@@ -60,12 +60,10 @@ export default class FileStore{
             // this.sendMessageWithPhoto(messageWithFile);
             await this.sendMessageWithPhotoApi(messageWithFile)
             this.setSelectedFile(undefined);
-            store.messageStore.setMessageText("");
-       
-           
-            
-
-            
+            store.messageStore.setMessageMediaText("");
+            this.setIsUploadingFile(false)
+            store.modalStore.closeModal()
+    
         }
     }
 
@@ -126,7 +124,7 @@ export default class FileStore{
     }
 
     base64ToUint8Array = (base64: string) => {
-        const binaryString = atob(base64); // Decode base64
+        const binaryString = atob(base64); 
         const length = binaryString.length;
         const bytes = new Uint8Array(length);
         for (let i = 0; i < length; i++) {
@@ -158,6 +156,15 @@ export default class FileStore{
 
     addFileContent  = (fileContent : FileContent) => { 
         this.files.set(fileContent.fileId, fileContent);
+    }
+
+    deleteFileContent = (fileId : number) => {
+        const fileContent = this.files.get(fileId)?.fileContentUrl
+        if(fileContent){
+            URL.revokeObjectURL(fileContent)
+        }
+        
+        this.files.delete(fileId)
     }
 
     

@@ -10,7 +10,7 @@ import { Dropdown, Menu } from "antd";
 import { EllipsisOutlined } from '@ant-design/icons';
 
 function ChatContainer () {
-    const { messageStore, chatStore, profileStore, userStore } = useStore();
+    const { messageStore, chatStore, profileStore, userStore} = useStore();
     const { MessagesInGroup} = messageStore;
     const {getFullNameOfProfile, getStatusOfProfile} = profileStore;
     const {getChatName} = chatStore
@@ -82,7 +82,11 @@ function ChatContainer () {
                 </div>
             </div>
             <div className="messageInputContainer">
-                <MessageInput />
+                <div className="messageInputContent">
+                    <MessageInput />
+                    
+                </div>
+                
             </div>
            
       

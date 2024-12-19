@@ -43,6 +43,12 @@ function MessageItem({message} : MessageProps){
         }
         >   
             <div className="messageContainer">
+                <div className="fileContainer">
+                    {message.fileId && (
+                        <img src={getFileById(message.fileId)} alt="Preview" className="imgContainer"/>
+                    )}
+                </div>
+
                 <div className="messageText">
                     {message.text}
                 </div>
@@ -53,9 +59,7 @@ function MessageItem({message} : MessageProps){
                     </div>
                 )}
 
-                {message.fileId && (
-                    <img src={getFileById(message.fileId)} alt="Preview"/>
-                )}
+               
             </div>
             
 

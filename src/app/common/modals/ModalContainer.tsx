@@ -10,7 +10,7 @@ export default observer(function ModalContainer() {
             open={modalStore.modal.open} 
             onCancel={modalStore.closeModal} 
             footer={null} 
-            width={300} 
+            width={300}
         >
             <div>
                 {modalStore.modal.body} 
