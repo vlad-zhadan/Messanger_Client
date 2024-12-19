@@ -57,6 +57,9 @@ export default class ConnectionStore{
         this.hubConnection.on('ConfirmBlockingPersonalChat', store.userStore.confirmBlockUser)
         this.hubConnection.on('ReceiveBlockedUser', store.userStore.getBlockUser)
 
+        this.hubConnection.on('ConfirmSendMessageWithPhoto', store.fileStore.confirmSendingMessageWithPhoto)
+        this.hubConnection.on('ReceiveMessageWithPhoto', store.fileStore.getMessageWithPhoto)
+
         this.hubConnection.start().catch(error => console.log('Eror:', error));
     }
 

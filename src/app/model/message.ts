@@ -11,9 +11,9 @@ export interface Message {
     chatId: number
     text: string
     userOwnerId: number 
-    documentId : number
+    fileId : number
     timeSent: string
-    receiverIds : number[]
+    // receiverIds : number[]
     status : MessageStatus
 }
 

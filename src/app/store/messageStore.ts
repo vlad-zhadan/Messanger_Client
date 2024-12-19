@@ -24,6 +24,15 @@ export default class MessageStore {
         return []; 
     }
 
+   isMessageLoaded = (messageId: number) => {
+        for (const [, nestedMap] of this.messages) { 
+            if (nestedMap.has(messageId)) { 
+                return true;
+            }
+        }
+        return false; 
+    }
+
     addMessages = (messages : Message[]) => {
         messages.forEach((message) => {
             this.addMessage(message);
@@ -181,13 +190,13 @@ export default class MessageStore {
         e.preventDefault(); 
 
         if (this.messageCurrent.text.trim() !== "" && store.chatStore.choosenChat !== null) {
-        const message: MessageToSend = {
-            text: this.messageCurrent.text,
-            chatId: store.chatStore.choosenChat!,
-        };
+            const message: MessageToSend = {
+                text: this.messageCurrent.text,
+                chatId: store.chatStore.choosenChat!,
+            };
 
-        this.sendMessage(message);
-        this.setMessageText(""); 
+            this.sendMessage(message);
+            this.setMessageText(""); 
         }
     }
 

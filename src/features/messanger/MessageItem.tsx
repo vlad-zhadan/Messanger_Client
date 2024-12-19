@@ -10,8 +10,9 @@ interface MessageProps{
 }
 
 function MessageItem({message} : MessageProps){
-    const { messageStore, userStore } = useStore();
+    const { messageStore, userStore, fileStore } = useStore();
     const { deleteMessage, chooseMessegeToEdit} = messageStore;
+    const {getFileById} = fileStore
     
     const menu = (
     <Menu>
@@ -50,6 +51,10 @@ function MessageItem({message} : MessageProps){
                     <div className="editedElement">
                         <p>edited</p>
                     </div>
+                )}
+
+                {message.fileId && (
+                    <img src={getFileById(message.fileId)} alt="Preview"/>
                 )}
             </div>
             
