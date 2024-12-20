@@ -24,6 +24,14 @@ export default class FileStore{
         );
     }
 
+    getTypeOfFile = (fileId : number) => {
+        return this.files.get(fileId)?.fileType
+    }
+
+    getNameOfFile = (fileId : number) => {
+        return this.files.get(fileId)?.fileName
+    }
+
     setIsUploadingFile = (status : boolean) => {
         this.isUploadingFile = status;
     }
@@ -76,7 +84,8 @@ export default class FileStore{
                 const savedMessageFile : FileContent = {
                     fileId: messageCreated.fileId,
                     fileContentUrl : URL.createObjectURL(messageWithFile.fileContent) ,
-                    fileType: messageWithFile.fileType
+                    fileType: messageWithFile.fileType,
+                    fileName: messageWithFile.fileName
                 }
                 this.addFileContent(savedMessageFile)
 
@@ -142,7 +151,8 @@ export default class FileStore{
         const fileContent : FileContent = {
             fileId: message.fileId,
             fileContentUrl : URL.createObjectURL(fileContentBlob),
-            fileType: message.fileType
+            fileType: message.fileType,
+            fileName: message.fileName
         }
         this.addFileContent(fileContent);
         console.log(fileContent.fileContentUrl)

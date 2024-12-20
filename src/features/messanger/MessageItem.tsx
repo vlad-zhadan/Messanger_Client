@@ -2,8 +2,10 @@ import { observer } from "mobx-react-lite"
 import { Message, MessageStatus } from "../../app/model/message"
 import { useStore } from "../../app/store/store";
 import './Chat.css'
-import { Dropdown, Menu } from "antd";
+import { Button, Dropdown, Menu } from "antd";
 import { EllipsisOutlined } from '@ant-design/icons';
+import { FileType } from "../../app/model/file";
+import FileCard from "./FileCard";
 
 interface MessageProps{
     message: Message
@@ -12,7 +14,7 @@ interface MessageProps{
 function MessageItem({message} : MessageProps){
     const { messageStore, userStore, fileStore } = useStore();
     const { deleteMessage, chooseMessegeToEdit} = messageStore;
-    const {getFileById} = fileStore
+    const {getFileById, getTypeOfFile, getNameOfFile} = fileStore
     
     const menu = (
     <Menu>
@@ -44,9 +46,14 @@ function MessageItem({message} : MessageProps){
         >   
             <div className="messageContainer">
                 <div className="fileContainer">
-                    {message.fileId && (
+                    {message.fileId && getTypeOfFile(message.fileId)! == FileType.Image && (
                         <img src={getFileById(message.fileId)} alt="Preview" className="imgContainer"/>
                     )}
+                    {message.fileId && getTypeOfFile(message.fileId)! == FileType.File && (
+                        <FileCard fileName={getNameOfFile(message.fileId)!} />
+                    )}
+
+
                 </div>
 
                 <div className="messageText">

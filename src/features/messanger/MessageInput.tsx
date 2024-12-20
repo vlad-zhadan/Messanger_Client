@@ -6,6 +6,7 @@ import { CloseOutlined, SendOutlined, UploadOutlined } from '@ant-design/icons';
 import FileUploadForm from "./FileUploadForm";
 import { useEffect, useRef, useState } from "react";
 import FileInput from "./FileInput";
+import { FileType } from "../../app/model/file";
 
 function MessageInput () {
     const { messageStore, modalStore, fileStore } = useStore();
@@ -43,6 +44,7 @@ function MessageInput () {
                     <div className="previewContent">
                             <div className="imageConteiner">
                                 <img src={previewUrl} alt="Preview" className="imgContainer"/>
+                                
                             </div>
                             <div className="inputContainer">
                                 <FileInput />

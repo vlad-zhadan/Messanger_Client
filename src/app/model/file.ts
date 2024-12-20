@@ -10,12 +10,14 @@ export interface MessageWithFileReceive extends Message {
     fileId: number;
     fileContent : string;
     fileType: FileType
+    fileName : string;
 }
 
 export interface FileContent {
     fileId: number;
     fileContentUrl : string;
     fileType: FileType
+    fileName : string;
 }
 
 export enum FileType {

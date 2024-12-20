@@ -209,3 +209,9 @@
     background-color: rgb(49, 80, 80) !important;
 }
 
+.messageText{
+    display: flex;
+    flex-direction: column;
+    margin-left: 1.5%;
+}
+
