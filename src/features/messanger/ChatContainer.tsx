@@ -8,9 +8,10 @@ import './Chat.css'
 import ProfileStatus from "./ProfileStatus";
 import { Dropdown, Menu } from "antd";
 import { EllipsisOutlined } from '@ant-design/icons';
+import FindMessageContainer from "./FindMessageContainer";
 
 function ChatContainer () {
-    const { messageStore, chatStore, profileStore, userStore} = useStore();
+    const { messageStore, chatStore, profileStore, userStore, modalStore} = useStore();
     const { MessagesInGroup} = messageStore;
     const {getFullNameOfProfile, getStatusOfProfile} = profileStore;
     const {getChatName} = chatStore
@@ -46,7 +47,11 @@ function ChatContainer () {
             </button>
             <button
                 className="delete-button"
-                onClick={() => {messageStore.getMessagesFromSearch("aboba")}}
+                onClick={() => {
+                    messageStore.clearMessagesFromSearch()
+                    modalStore.openModal(<FindMessageContainer />)
+                
+                }}
             >
                Search
             </button>
@@ -60,6 +65,7 @@ function ChatContainer () {
                 <div className="nameOfChat">
                     {getChatName(chatStore.choosenChat!)?.toString()}
                 </div>
+                
                 <div className="statusOfOnline">
                     <ProfileStatus />
                 </div>

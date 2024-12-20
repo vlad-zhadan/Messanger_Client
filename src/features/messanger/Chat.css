@@ -64,7 +64,8 @@
 
     display: flex;
     align-items: center;
-    justify-content: center;
+    /* justify-content: center; */
+        justify-content: flex-end;
 
     background-color: #13449a;
 }
@@ -210,8 +211,55 @@
 }
 
 .messageText{
-    display: flex;
+    /* display: flex;
     flex-direction: column;
-    margin-left: 1.5%;
+    margin-left: 1.5%; */
 }
 
+.resultsForSearchMessages{
+    width: 100%;
+}
+
+.resultsForSearchMessages .message{
+    margin-bottom: 10px;
+}
+
+.findMessageContainer {
+    width: 100%;
+    max-height: 500px;
+    overflow-y: auto;
+
+}
+.searchBarForMessages{
+    margin-top: 20px;
+}
+
+.searchBar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+
+}
+
+.searchInput {
+    flex: 1;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.searchButton {
+    padding: 8px 12px;
+    font-size: 14px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.searchButton:hover {
+    background-color: #0056b3;
+}

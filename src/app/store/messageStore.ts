@@ -9,6 +9,7 @@ export default class MessageStore {
     messageCurrentWithMedia : Message
     messageToEdit : Message | undefined;
     isEditingMessage = false
+    foundMessages : Message[] | undefined
   
     constructor () { 
         makeAutoObservable(this);
@@ -239,16 +240,26 @@ export default class MessageStore {
     getMessagesFromSearch = async (text : string) => {
         if(store.chatStore.choosenChat){
             try {
-
+                this.foundMessages = [];
                 const messages = await agent.Messages.find(store.chatStore.choosenChat, text);
-
-                console.log(messages)
+                messages.forEach((message) => {
+                    this.foundMessages?.push(message)
+                })
      
             } catch (error) {
                 console.log(error);
                 
             }  
         }
+    }
+
+    get ArrayOfFoundMessages() {
+        if(!this.foundMessages) return []
+        return this.foundMessages
+    }
+
+    clearMessagesFromSearch = () => {
+        this.foundMessages = [];
     }
 
 }
